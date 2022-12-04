@@ -1,2 +1,2 @@
 clean:
-	rm client server showip
+	rm -f client server showip listener talker
