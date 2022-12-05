@@ -37,14 +37,13 @@ int main(void) {
   hints.ai_flags = AI_PASSIVE; // use my IP
 
   if ((rv = getaddrinfo(NULL, MYPORT, &hints, &servinfo)) != 0) {
-      fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
-      return 1;
+    fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
+    return 1;
   }
 
   // loop through results and bind to first we can
-  for(p = servinfo; p != NULL; p = p->ai_next) {
-    if((sockfd = socket(p->ai_family, p->ai_socktype,
-            p->ai_protocol)) == -1) {
+  for (p = servinfo; p != NULL; p = p->ai_next) {
+    if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) {
       perror("listener:socket");
       continue;
     }
@@ -68,21 +67,19 @@ int main(void) {
   printf("listener: waiting to recvfrom...\n");
 
   addr_len = sizeof their_addr;
-  if((numbytes = recvfrom(sockfd, buf, MAXBUFLEN-1, 0,
-          (struct sockaddr*)&their_addr, &addr_len)) == -1) {
+  if ((numbytes = recvfrom(sockfd, buf, MAXBUFLEN - 1, 0,
+                           (struct sockaddr *)&their_addr, &addr_len)) == -1) {
     perror("recvfrom:");
     exit(1);
   }
 
   printf("listener: got packet from %s\n",
-      inet_ntop(their_addr.ss_family,
-        get_in_addr((struct sockaddr*)&their_addr),
-        s, sizeof s));
+         inet_ntop(their_addr.ss_family,
+                   get_in_addr((struct sockaddr *)&their_addr), s, sizeof s));
   buf[numbytes] = '\0';
   printf("listener: packet contains \"%s\"\n", buf);
 
   close(sockfd);
 
   return 0;
-
 }
